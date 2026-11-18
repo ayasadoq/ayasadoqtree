@@ -14,10 +14,13 @@ const page = (title, ...blocks) => ({ title, date: "", blocks }); // date only u
 export const To = [
   [T("i'm aya sadoq, a "), mark("5th-year engineering student"), T(" in information systems and communications at ensaj, based in morocco.")],
   [T("i design "), mark("ai and information systems"), T(" that help people make smarter, calmer decisions, from erp insights to assistive technology.")],
-  [T("i'm looking for a "), mark("pfe internship"), T(".")],
+  [T("looking for a "), mark("pfe internship in January 2027"), T(", based in morocco and open to remote. write to "), L("aya.sadoq.2003.lm@gmail.com", "mailto:aya.sadoq.2003.lm@gmail.com"), T(".")],
+  { gap: 1, runs: [T("ai & data: rag, cnn, yolo, pytorch, tensorflow, langgraph, chromadb, duckdb, polars.")] },
+  [T("web & mobile: laravel, next.js, fastapi, spring boot, php, react, kotlin, jetpack compose, react native.")],
+  [T("security & devops: ctf, cloudflare waf, iso 27001, docker, kubernetes (learning now).")],
   { gap: 2, runs: [T("find me on "), L("github", "https://github.com/ayasadoq"), T(" and "), L("linkedin", "https://www.linkedin.com/in/aya-sadoq-7a7568265"), T(".")] },
 ];
-export const ko = "i'm aya sadoq, a 5th-year engineering student in information systems and communications at ensaj, based in morocco. i design ai and information systems that help people make smarter, calmer decisions, from erp insights to assistive technology. i'm looking for a pfe internship. find me on github and linkedin.";
+export const ko = To.map((p) => (Array.isArray(p) ? p : p.runs).map((r) => r.s).join("")).join(" ");
 export const Eo = {
   style: "pegada",
   beside: 300,
@@ -46,35 +49,32 @@ const projects = [
 
 // ---------- experience: [slug, leaf label, role line, description] ----------
 const experience = [
-  ["sarabo", "sarabo", "AI Developer Intern at SARABO, Jun 2026 – Sep 2026", "Designed and developed a conversational BI copilot for Sage X3 ERP, combining deterministic business intelligence with LLM-powered Text-to-SQL. Implemented seven BI features, including dead-stock detection, stock forecasting, replenishment recommendations, and automated reporting.", gh("sage-x3-copilot")],
-  ["ah-digital", "ah digital", "Mobile Developer & AI Automation Intern at AH Digital, Jan 2026 – Feb 2026", "Migrated a Swiss renewable-energy platform from a legacy web application to a React Native Android application, optimizing API request batching to reduce network round trips. Developed an AI chatbot using n8n and integrated automated security workflows to detect suspicious API requests/IP addresses, block malicious sources, and strengthen application protection through Cloudflare WAF and DDoS mitigation."],
-  ["gold-installations", "gold installations", "Full-Stack Developer Intern at Gold Installations, Jun 2025 – Aug 2025", "Developed an end-to-end e-commerce platform featuring product catalogs, shopping cart, order management, and a role-based administration dashboard using PHP, MySQL, JavaScript, and Bootstrap.", gh("Electro-store")],
+  ["sarabo", "sarabo", "AI Developer Intern at SARABO, Jun 2026 – Sep 2026", ["Designed and developed a conversational BI copilot for Sage X3 ERP, combining deterministic business intelligence with LLM-powered Text-to-SQL. Implemented seven BI features, including dead-stock detection, stock forecasting, replenishment recommendations, and automated reporting."], gh("sage-x3-copilot")],
+  ["ah-digital", "ah digital", "Mobile Developer & AI Automation Intern at AH Digital, Jan 2026 – Feb 2026", ["Migrated a Swiss renewable-energy platform from a legacy web application to a React Native Android application, optimizing API request batching to reduce network round trips. Developed an AI chatbot using n8n and integrated automated security workflows to detect suspicious API requests/IP addresses, block malicious sources, and strengthen application protection through Cloudflare WAF and DDoS mitigation."]],
+  ["gold-installations", "gold installations", "Full-Stack Developer Intern at Gold Installations, Jun 2025 – Aug 2025", ["Developed an end-to-end e-commerce platform featuring product catalogs, shopping cart, order management, and a role-based administration dashboard using PHP, MySQL, JavaScript, and Bootstrap."], gh("Electro-store")],
 ];
 
 // ---------- community: [slug, leaf label, role line, description] ----------
 const community = [
-  ["app-in-sciences", "app in sciences", "Secretary General (former Media Manager), App in Sciences – ENSAJ IT Club, 2022 – 2025", "Led organizational operations for a university IT club organizing hackathons, CTF competitions, conferences, and technical workshops. Coordinated a 10-member board and progressed from Media Manager to Secretary General, contributing to the club's visibility and growth.", null, ["ais-board", "ais-secretary", "google-devfest"]],
-  ["om-nets", "om nets", "Event Manager, OM Nets, 2025 – present", "Coordinate with a nationwide network of ENSA representatives to organize events and initiatives supporting engineering students across Morocco.", null, ["om-nets"]],
-  ["takafan", "takafan", "Reading Cell Manager, Takafan, 2022 – 2023", "Organized and facilitated reading sessions and literary activities, encouraging participation and knowledge-sharing among club members."],
+  ["app-in-sciences", "app in sciences", "Secretary General (former Media Manager), App in Sciences – ENSAJ IT Club, 2022 – 2025", ["Led organizational operations for my university IT club organizing hackathons, CTF competitions, conferences, and technical workshops.", "@google-devfest", "Coordinated a 10-member board and progressed from Media Manager to Secretary General, contributing to the club's visibility and growth.", "@ais-board", "@ais-secretary"]],
+  ["om-nets", "om nets", "Event Manager, OM Nets, 2025 – present", ["@om-nets", "Coordinate with a nationwide network of ENSA representatives to organize events and initiatives supporting engineering students across Morocco."]],
+  ["takafan", "takafan", "Reading Cell Manager, Takafan, 2022 – 2023", ["Organized and facilitated reading sessions and literary activities, encouraging participation and knowledge-sharing among club members."]],
 ];
 
 // ---------- build the page map (lo) ----------
+const bodyBlocks = (body) => body.map((x) => x.startsWith("@") ? IMG(x.slice(1)) : P(T(x)));
 export const lo = {};
 for (const [, slug, label, text, repo] of projects) {
   const blocks = [P(T(text))];
   if (repo) blocks.push(P(T("code: "), L("github", repo)));
   lo["/projects/" + slug + "/"] = page(label, ...blocks);
 }
-for (const [slug, label, role, text, repo] of experience) {
-  const blocks = [P(T(role)), P(T(text))];
+for (const [slug, label, role, body, repo] of experience) {
+  const blocks = [P(T(role)), ...bodyBlocks(body)];
   if (repo) blocks.push(P(T("code: "), L("github", repo)));
   lo["/experience/" + slug + "/"] = page(label, ...blocks);
 }
-for (const [slug, label, role, text, , images] of community) {
-  const blocks = [P(T(role)), P(T(text))];
-  if (images) blocks.push(...images.map(IMG));
-  lo["/community/" + slug + "/"] = page(label, ...blocks);
-}
+for (const [slug, label, role, body] of community) lo["/community/" + slug + "/"] = page(label, P(T(role)), ...bodyBlocks(body));
 lo["/achievements/ctf/"] = page("ctf",
   P(T("ranked "), mark("26th out of 1,070 participants (top 3%)"), T(" across capture-the-flag competitions.")),
   IMG("ctf-1337"),
@@ -86,13 +86,18 @@ lo["/achievements/ctf/"] = page("ctf",
 );
 lo["/achievements/certifications/"] = page("certifications",
   LI(T("aws academy cloud foundations")),
-  LI(T("aws academy cloud architecting")),
+  LI(T("aws academy cloud architecting (in progress)")),
   LI(T("aws academy cloud developing")),
   LI(T("aws academy machine learning foundations")),
   LI(T("aws academy machine learning for nlp")),
   LI(T("aws academy generative ai foundations")),
   LI(T("aws engineering operations technician")),
-  LI(T("iso/iec 27001 (in progress)")), // TODO: I'll change this if I have earned it
+  LI(T("iso/iec 27001 security associate")),
+);
+lo["/now/"] = page("now",
+  P(T("this month: "), mark("devops"), T(". sharpening my docker and kubernetes skills.")),
+  P(T("also working on: "), mark("aws academy cloud architecting"), T(" (in progress).")),
+  P(T("updated november 2026.")),
 );
 
 // ---------- build the tree (ro) ----------
@@ -115,6 +120,7 @@ export const ro = {
       { name: "ctf", href: "/achievements/ctf/" },
       { name: "certifications", href: "/achievements/certifications/" },
     ] },
+    { name: "now", href: "/now/" },
     {
       name: "contact",
       kids: [
