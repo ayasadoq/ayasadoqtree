@@ -1,3 +1,5 @@
+import { photos } from "./photos.js";
+
 // All site content lives here. The engine reads only `ro` (the tree) and `lo` (the pages).
 const gh = (repo) => "https://github.com/ayasadoq/" + repo;
 const T = (s) => ({ s });                       // plain text
@@ -5,6 +7,7 @@ const L = (s, href) => ({ s, href });           // link (opens in a new tab)
 const mark = (s) => ({ s, mark: true });        // marker highlight
 const P = (...runs) => ({ t: "p", runs });      // paragraph
 const LI = (...runs) => ({ t: "li", runs });
+const IMG = (name) => ({ t: "img", src: "posts/img/" + name + ".jpg?v=" + photos[name].v, w: photos[name].w, h: photos[name].h, color: "posts/img/color/" + name + ".jpg?v=" + photos[name].v });
 const page = (title, ...blocks) => ({ title, date: "", blocks }); // date only used by /blog/ pages
 
 // ---------- me ----------
@@ -15,6 +18,11 @@ export const To = [
   { gap: 2, runs: [T("find me on "), L("github", "https://github.com/ayasadoq"), T(" and "), L("linkedin", "https://www.linkedin.com/in/aya-sadoq-7a7568265"), T(".")] },
 ];
 export const ko = "i'm aya sadoq, a 5th-year engineering student in information systems and communications at ensaj, based in morocco. i design ai and information systems that help people make smarter, calmer decisions, from erp insights to assistive technology. i'm looking for a pfe internship. find me on github and linkedin.";
+export const Eo = {
+  style: "pegada",
+  beside: 300,
+  items: [{ src: "posts/img/me-1.jpg?v=" + photos["me-1"].v, w: photos["me-1"].w, h: photos["me-1"].h, note: "" }],
+};
 
 // ---------- projects: [group, slug, leaf label, description, github url or null] ----------
 const groups = ["ai & data", "agents", "mobile", "web & erp", "security & iot"];
@@ -45,8 +53,8 @@ const experience = [
 
 // ---------- community: [slug, leaf label, role line, description] ----------
 const community = [
-  ["app-in-sciences", "app in sciences", "Secretary General (former Media Manager), App in Sciences – ENSAJ IT Club, 2022 – 2025", "Led organizational operations for a university IT club organizing hackathons, CTF competitions, conferences, and technical workshops. Coordinated a 10-member board and progressed from Media Manager to Secretary General, contributing to the club's visibility and growth."],
-  ["om-nets", "om nets", "Event Manager, OM Nets, 2025 – present", "Coordinate with a nationwide network of ENSA representatives to organize events and initiatives supporting engineering students across Morocco."],
+  ["app-in-sciences", "app in sciences", "Secretary General (former Media Manager), App in Sciences – ENSAJ IT Club, 2022 – 2025", "Led organizational operations for a university IT club organizing hackathons, CTF competitions, conferences, and technical workshops. Coordinated a 10-member board and progressed from Media Manager to Secretary General, contributing to the club's visibility and growth.", null, ["ais-board", "ais-secretary", "google-devfest"]],
+  ["om-nets", "om nets", "Event Manager, OM Nets, 2025 – present", "Coordinate with a nationwide network of ENSA representatives to organize events and initiatives supporting engineering students across Morocco.", null, ["om-nets"]],
   ["takafan", "takafan", "Reading Cell Manager, Takafan, 2022 – 2023", "Organized and facilitated reading sessions and literary activities, encouraging participation and knowledge-sharing among club members."],
 ];
 
@@ -62,9 +70,14 @@ for (const [slug, label, role, text, repo] of experience) {
   if (repo) blocks.push(P(T("code: "), L("github", repo)));
   lo["/experience/" + slug + "/"] = page(label, ...blocks);
 }
-for (const [slug, label, role, text] of community) lo["/community/" + slug + "/"] = page(label, P(T(role)), P(T(text)));
+for (const [slug, label, role, text, , images] of community) {
+  const blocks = [P(T(role)), P(T(text))];
+  if (images) blocks.push(...images.map(IMG));
+  lo["/community/" + slug + "/"] = page(label, ...blocks);
+}
 lo["/achievements/ctf/"] = page("ctf",
   P(T("ranked "), mark("26th out of 1,070 participants (top 3%)"), T(" across capture-the-flag competitions.")),
+  IMG("ctf-1337"),
   LI(T("cyber odyssey (akasec / 1337)")),
   LI(T("mundiapolis ctf")),
   LI(T("ehtp ctf")),
@@ -86,7 +99,7 @@ lo["/achievements/certifications/"] = page("certifications",
 export const ro = {
   name: "aya sadoq",
   kids: [
-    { name: "me", text: ko, rich: To },
+    { name: "me", text: ko, rich: To, photos: Eo },
     {
       name: "projects",
       kids: [
