@@ -4,6 +4,7 @@ const T = (s) => ({ s });                       // plain text
 const L = (s, href) => ({ s, href });           // link (opens in a new tab)
 const mark = (s) => ({ s, mark: true });        // marker highlight
 const P = (...runs) => ({ t: "p", runs });      // paragraph
+const LI = (...runs) => ({ t: "li", runs });
 const page = (title, ...blocks) => ({ title, date: "", blocks }); // date only used by /blog/ pages
 
 // ---------- me ----------
@@ -27,7 +28,7 @@ const projects = [
   ["mobile", "studyflow-ai", "studyflow ai", "Developed a native Android study companion featuring conversational AI task parsing, personalized study assistance, Pomodoro sessions, offline-first persistence, and gamification. Built with Kotlin, MVVM, Room/SQLite, and Groq's Llama 3.3 API.", null],
   ["mobile", "floussi", "floussi", "Co-developed a Moroccan personal finance application featuring expense tracking, Daret management, Sando9ti savings goals, financial statistics, and offline-first storage. Built with React Native, Expo, and Firebase Authentication.", gh("floussi-app")],
   ["web & erp", "mediflow-ai", "mediflow ai", "Developed an Odoo-based clinic management solution integrated with a separate FastAPI service for AI capabilities. Validated through a test campaign with 70 passing tests.", null],
-  ["web & erp", "electro-store", "electro store", "Built a full-stack electronics e-commerce platform featuring product catalogs, search and filtering, shopping cart, order management, user accounts, administration, and PayPal checkout. Built with PHP, MySQL, JavaScript, and Bootstrap.", gh("Electro-store")],
+  ["web & erp", "odoo-maintenance", "odoo maintenance", "Developed a custom Odoo module for managing maintenance interventions, technicians, clients, and equipment. Includes ORM models, access controls, kanban/calendar views, and dashboards.", null],
   ["security & iot", "private-lte", "private lte", "Designed a virtualized private 4G network experiment integrating SIM-based authentication with facial biometrics as a second authentication factor. Used Open5GS, srsRAN, NS-3, Python, and OpenCV.", null],
   ["security & iot", "esp32-climate", "esp32 climate", "Developed an IoT monitoring solution using ESP32 and DHT22 to collect temperature and humidity measurements, transmit data over Wi-Fi, and store historical readings in Supabase for remote visualization.", null],
   ["security & iot", "card-fraud-ui", "card fraud ui", "Created a React/Vite frontend scaffold for a credit-card fraud detection application. The repository currently contains preliminary authentication and dashboard routes rather than a completed detection system.", gh("CCFD-")],
@@ -35,9 +36,9 @@ const projects = [
 
 // ---------- experience: [slug, leaf label, role line, description] ----------
 const experience = [
-  ["sarabo", "sarabo", "AI Developer Intern at SARABO, Jun 2026 – Sep 2026", "Designed and developed a conversational BI copilot for Sage X3 ERP, combining deterministic business intelligence with LLM-powered Text-to-SQL. Implemented seven BI features, including dead-stock detection, stock forecasting, replenishment recommendations, and automated reporting."],
+  ["sarabo", "sarabo", "AI Developer Intern at SARABO, Jun 2026 – Sep 2026", "Designed and developed a conversational BI copilot for Sage X3 ERP, combining deterministic business intelligence with LLM-powered Text-to-SQL. Implemented seven BI features, including dead-stock detection, stock forecasting, replenishment recommendations, and automated reporting.", gh("sage-x3-copilot")],
   ["ah-digital", "ah digital", "Mobile Developer & AI Automation Intern at AH Digital, Jan 2026 – Feb 2026", "Migrated a Swiss renewable-energy platform from a legacy web application to a React Native Android application, optimizing API request batching to reduce network round trips. Developed an AI chatbot using n8n and integrated automated security workflows to detect suspicious API requests/IP addresses, block malicious sources, and strengthen application protection through Cloudflare WAF and DDoS mitigation."],
-  ["gold-installations", "gold installations", "Full-Stack Developer Intern at Gold Installations, Jun 2025 – Aug 2025", "Developed an end-to-end e-commerce platform featuring product catalogs, shopping cart, order management, and a role-based administration dashboard using PHP, MySQL, JavaScript, and Bootstrap."],
+  ["gold-installations", "gold installations", "Full-Stack Developer Intern at Gold Installations, Jun 2025 – Aug 2025", "Developed an end-to-end e-commerce platform featuring product catalogs, shopping cart, order management, and a role-based administration dashboard using PHP, MySQL, JavaScript, and Bootstrap.", gh("Electro-store")],
 ];
 
 // ---------- community: [slug, leaf label, role line, description] ----------
@@ -54,8 +55,30 @@ for (const [, slug, label, text, repo] of projects) {
   if (repo) blocks.push(P(T("code: "), L("github", repo)));
   lo["/projects/" + slug + "/"] = page(label, ...blocks);
 }
-for (const [slug, label, role, text] of experience) lo["/experience/" + slug + "/"] = page(label, P(T(role)), P(T(text)));
+for (const [slug, label, role, text, repo] of experience) {
+  const blocks = [P(T(role)), P(T(text))];
+  if (repo) blocks.push(P(T("code: "), L("github", repo)));
+  lo["/experience/" + slug + "/"] = page(label, ...blocks);
+}
 for (const [slug, label, role, text] of community) lo["/community/" + slug + "/"] = page(label, P(T(role)), P(T(text)));
+lo["/achievements/ctf/"] = page("ctf",
+  P(T("ranked "), mark("26th out of 1,070 participants (top 3%)"), T(" across capture-the-flag competitions.")),
+  LI(T("cyber odyssey (akasec / 1337)")),
+  LI(T("mundiapolis ctf")),
+  LI(T("ehtp ctf")),
+  LI(T("ensais ctf")),
+  P(T("strongest in web exploitation, forensics, cryptography, steganography and osint.")),
+);
+lo["/achievements/certifications/"] = page("certifications",
+  LI(T("aws academy cloud foundations")),
+  LI(T("aws academy cloud architecting")),
+  LI(T("aws academy cloud developing")),
+  LI(T("aws academy machine learning foundations")),
+  LI(T("aws academy machine learning for nlp")),
+  LI(T("aws academy generative ai foundations")),
+  LI(T("aws engineering operations technician")),
+  LI(T("iso/iec 27001 (in progress)")), // TODO: I'll change this if I have earned it
+);
 
 // ---------- build the tree (ro) ----------
 export const ro = {
@@ -74,6 +97,10 @@ export const ro = {
     },
     { name: "experience", kids: experience.map((e) => ({ name: e[1], href: "/experience/" + e[0] + "/" })) },
     { name: "community", kids: community.map((c) => ({ name: c[1], href: "/community/" + c[0] + "/" })) },
+    { name: "achievements", kids: [
+      { name: "ctf", href: "/achievements/ctf/" },
+      { name: "certifications", href: "/achievements/certifications/" },
+    ] },
     {
       name: "contact",
       kids: [
