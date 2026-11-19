@@ -29,7 +29,7 @@
         <span aria-hidden="true">/</span>
         <button type="button" data-language="fr" aria-label="Français">FR</button>
       </div>
-      <a class="cv-link" href="cv/aya-sadoq-cv.pdf" download>download cv <span aria-hidden="true">↗</span></a>
+      <a class="cv-link" href="cv/cv_aya_sadoq_en.pdf" download>download cv <span aria-hidden="true">↗</span></a>
     </nav>
     <script>
       (() => {
@@ -62,6 +62,7 @@
           });
         });
         document.querySelector(".cv-link").textContent = language === "fr" ? "télécharger mon CV ↗" : "download cv ↗";
+        document.querySelector(".cv-link").href = language === "fr" ? "cv/cv_aya_sadoq_fr.pdf" : "cv/cv_aya_sadoq_en.pdf";
       })();
     </script>
     <script type="module" src="tree/src/main.js?v=lang-fr-2"></script>
