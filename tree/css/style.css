@@ -1,7 +1,7 @@
 @font-face {
   font-family: "Libre Franklin";
   /* recortada a latín y a los pesos 500-700 (tools/v20-font.py) */
-  src: url(/tree/fonts/LibreFranklin-v20.woff2?v=0b5986a181) format("woff2");
+  src: url(../fonts/LibreFranklin-v20.woff2?v=0b5986a181) format("woff2");
   font-weight: 500 700;
   font-display: swap;
 }
@@ -15,4 +15,66 @@ body {
 canvas {
   display: block;
   touch-action: none; /* la hoja se arrastra con el dedo cuando el texto es largo */
+}
+.opening-note {
+  position: fixed;
+  z-index: 2;
+  top: clamp(24px, 6vh, 56px);
+  left: 50%;
+  width: min(70vw, 520px);
+  height: 1.5em;
+  transform: translateX(-50%);
+  color: #f1edf0;
+  font: 500 clamp(15px, 2vw, 20px)/1.5 "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  text-align: center;
+  pointer-events: none;
+}
+.opening-note span {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: opening-line 2.8s ease both;
+}
+.opening-note span:nth-child(2) { animation-delay: 2.8s; }
+@keyframes opening-line {
+  0%, 12% { opacity: 0; transform: translateY(9px); }
+  24%, 72% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-6px); }
+}
+.top-actions {
+  position: fixed;
+  z-index: 3;
+  top: max(16px, env(safe-area-inset-top));
+  right: max(18px, env(safe-area-inset-right));
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #f1edf0;
+  font: 500 11px/1.4 "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+}
+.language-switch { display: flex; align-items: center; gap: 4px; opacity: .74; }
+.language-switch button {
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+.language-switch button[aria-pressed="true"] { opacity: 1; text-decoration: underline; }
+.language-switch button:focus-visible, .cv-link:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+.cv-link {
+  color: #f1edf0;
+  font: inherit;
+  letter-spacing: .035em;
+  text-decoration: none;
+  opacity: .82;
+}
+.cv-link:hover, .cv-link:focus-visible { opacity: 1; text-decoration: underline; }
+@media (prefers-reduced-motion: reduce) {
+  .opening-note { display: none; }
 }

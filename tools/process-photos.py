@@ -26,8 +26,10 @@ def main():
     input_files = {path.stem: path for path in SOURCE_DIR.iterdir() if path.is_file()}
     unexpected = sorted(set(input_files) - set(SLUGS))
     missing = sorted(set(SLUGS) - set(input_files))
-    if unexpected or missing:
-        raise ValueError(f"Unexpected photo names: {unexpected}; missing photos: {missing}")
+    if missing:
+        raise ValueError(f"Missing photos: {missing}")
+    if unexpected:
+        print(f"Ignoring unregistered photo originals: {', '.join(unexpected)}")
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
     COLOR_DIR.mkdir(parents=True, exist_ok=True)

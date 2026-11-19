@@ -5,20 +5,65 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <title>Aya Sadoq</title>
     <meta name="description" content="Aya Sadoq, engineering student building AI and information systems, looking for a PFE internship." />
-    <link rel="icon" href="/tree/icon/favicon.svg" type="image/svg+xml" />
-    <link rel="icon" href="/tree/icon/favicon-32.png" sizes="32x32" type="image/png" />
-    <link rel="apple-touch-icon" href="/tree/icon/apple-touch-icon.png" />
+    <link rel="icon" href="tree/icon/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="tree/icon/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="apple-touch-icon" href="tree/icon/apple-touch-icon.png" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Aya Sadoq" />
     <meta property="og:description" content="Aya Sadoq, engineering student building AI and information systems, looking for a PFE internship." />
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:title" content="Aya Sadoq" />
     <meta property="twitter:description" content="Aya Sadoq, engineering student building AI and information systems, looking for a PFE internship." />
-    <link rel="preload" href="/tree/fonts/LibreFranklin-v20.woff2?v=0b5986a181" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="/tree/css/style.css?v=22c93e4222" />
+    <link rel="preload" href="tree/fonts/LibreFranklin-v20.woff2?v=0b5986a181" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="tree/css/style.css?v=22c93e4222" />
   </head>
   <body>
     <canvas id="sheet" aria-label="me, projects, experience, community, achievements, now, contact"></canvas>
-    <script type="module" src="/tree/src/main.js?v=4e3da56a2e"></script>
+    <div class="opening-note" aria-label="Introduction">
+      <span>i'm aya sadoq. i build ai and software for real-world problems.</span>
+      <span>follow the leaves to explore my work.</span>
+    </div>
+    <nav class="top-actions" aria-label="Language and CV">
+      <div class="language-switch" aria-label="Language">
+        <button type="button" data-language="en" aria-label="English">EN</button>
+        <span aria-hidden="true">/</span>
+        <button type="button" data-language="fr" aria-label="Français">FR</button>
+      </div>
+      <a class="cv-link" href="cv/aya-sadoq-cv.pdf" download>download cv <span aria-hidden="true">↗</span></a>
+    </nav>
+    <script>
+      (() => {
+        let saved = null;
+        try { saved = localStorage.getItem("aya-language"); } catch {}
+        const browserPrefersFrench = navigator.languages?.some((item) => item.toLowerCase().startsWith("fr"))
+          || navigator.language?.toLowerCase().startsWith("fr");
+        const language = saved || (browserPrefersFrench ? "fr" : "en");
+        const description = language === "fr"
+          ? "Aya Sadoq, élève ingénieure en systèmes d’information et communication, spécialisée en IA et logiciels utiles. À la recherche d’un stage de fin d’études en janvier 2027."
+          : "Aya Sadoq, engineering student building AI and information systems, looking for a PFE internship in January 2027.";
+        document.documentElement.lang = language;
+        document.querySelector("#sheet").setAttribute("aria-label", language === "fr" ? "à propos, projets, compétences, expérience, engagement, distinctions, en ce moment, contact" : "me, projects, skills, experience, community, achievements, now, contact");
+        document.querySelector(".top-actions").setAttribute("aria-label", language === "fr" ? "Langue et CV" : "Language and CV");
+        document.querySelector(".language-switch").setAttribute("aria-label", language === "fr" ? "Choisir la langue" : "Choose language");
+        document.querySelector('meta[name="description"]').content = description;
+        document.querySelector('meta[property="og:description"]').content = description;
+        document.querySelector('meta[property="twitter:description"]').content = description;
+        document.querySelector(".opening-note").setAttribute("aria-label", language === "fr" ? "Présentation personnelle" : "Personal introduction");
+        if (language === "fr") {
+          const lines = document.querySelectorAll(".opening-note span");
+          lines[0].textContent = "je suis aya sadoq. je conçois des solutions d’IA et des logiciels pour des problèmes concrets.";
+          lines[1].textContent = "suivez les feuilles pour découvrir mon travail.";
+        }
+        document.querySelectorAll("[data-language]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.language === language));
+          button.addEventListener("click", () => {
+            try { localStorage.setItem("aya-language", button.dataset.language); } catch {}
+            location.reload();
+          });
+        });
+        document.querySelector(".cv-link").textContent = language === "fr" ? "télécharger mon CV ↗" : "download cv ↗";
+      })();
+    </script>
+    <script type="module" src="tree/src/main.js?v=lang-fr-2"></script>
   </body>
 </html>
