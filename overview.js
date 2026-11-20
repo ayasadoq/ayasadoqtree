@@ -243,4 +243,69 @@ function render(language) {
   }));
 }
 
+function enableScrollLeaves() {
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  const layer = node("div", "leaf-overlay");
+  layer.setAttribute("aria-hidden", "true");
+  document.body.append(layer);
+
+  const svgNS = "http://www.w3.org/2000/svg";
+  let previousY = window.scrollY;
+  let distanceSinceLeaf = 0;
+  let activeLeaves = 0;
+
+  const spawnLeaf = (direction) => {
+    if (activeLeaves >= 7 || document.hidden) return;
+
+    const leaf = document.createElementNS(svgNS, "svg");
+    leaf.setAttribute("viewBox", "0 0 32 20");
+    leaf.setAttribute("aria-hidden", "true");
+    leaf.classList.add("scroll-leaf");
+
+    const silhouette = document.createElementNS(svgNS, "path");
+    silhouette.setAttribute("d", "M1 10C7 0 20 0 31 8C24 19 10 20 1 10Z");
+    silhouette.setAttribute("fill", Math.random() > 0.74 ? "#bd7048" : "#71866c");
+    const vein = document.createElementNS(svgNS, "path");
+    vein.setAttribute("d", "M3 10C11 10 20 9 29 8");
+    vein.setAttribute("fill", "none");
+    vein.setAttribute("stroke", "#f5f3ee");
+    vein.setAttribute("stroke-opacity", ".7");
+    vein.setAttribute("stroke-width", "1");
+    leaf.append(silhouette, vein);
+
+    const fromLeft = Math.random() > 0.5;
+    const edge = fromLeft ? 3 + Math.random() * 5 : 92 + Math.random() * 5;
+    const startAngle = Math.round(Math.random() * 70 - 35);
+    leaf.style.left = `${edge}vw`;
+    leaf.style.top = `${18 + Math.random() * 64}vh`;
+    leaf.style.setProperty("--leaf-drift-x", `${(fromLeft ? 1 : -1) * (16 + Math.random() * 42)}px`);
+    const driftY = (direction > 0 ? -1 : 1) * (68 + Math.random() * 64);
+    leaf.style.setProperty("--leaf-drift-y", `${driftY}px`);
+    leaf.style.setProperty("--leaf-start-angle", `${startAngle}deg`);
+    leaf.style.setProperty("--leaf-end-angle", `${startAngle + (Math.random() > 0.5 ? 130 : -130)}deg`);
+    leaf.style.setProperty("--leaf-size", `${12 + Math.random() * 10}px`);
+
+    activeLeaves++;
+    layer.append(leaf);
+    leaf.addEventListener("animationend", () => {
+      leaf.remove();
+      activeLeaves--;
+    }, { once: true });
+  };
+
+  window.addEventListener("scroll", () => {
+    const currentY = window.scrollY;
+    const delta = currentY - previousY;
+    previousY = currentY;
+    distanceSinceLeaf += Math.abs(delta);
+
+    while (distanceSinceLeaf >= 190) {
+      distanceSinceLeaf -= 190;
+      spawnLeaf(delta);
+    }
+  }, { passive: true });
+}
+
 render(initialLanguage());
+enableScrollLeaves();

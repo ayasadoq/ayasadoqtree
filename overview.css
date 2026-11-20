@@ -47,6 +47,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid var(--orange); outlin
 .language-switch button[aria-pressed="true"] { color: var(--ink); text-decoration: underline; text-underline-offset: 3px; }
 
 .overview { width: min(1080px, calc(100% - 40px)); margin: 0 auto; }
+.leaf-overlay { position: fixed; z-index: 3; inset: 0; overflow: hidden; pointer-events: none; }
+.scroll-leaf {
+  position: absolute;
+  width: var(--leaf-size);
+  height: calc(var(--leaf-size) * .625);
+  opacity: 0;
+  filter: drop-shadow(0 2px 3px rgb(28 43 31 / 13%));
+  animation: leaf-drift 1.9s cubic-bezier(.2,.68,.3,1) both;
+  will-change: transform, opacity;
+}
+@keyframes leaf-drift {
+  0% { opacity: 0; transform: translate3d(0, 8px, 0) rotate(var(--leaf-start-angle)) scale(.65); }
+  18% { opacity: .54; }
+  100% { opacity: 0; transform: translate3d(var(--leaf-drift-x), var(--leaf-drift-y), 0) rotate(var(--leaf-end-angle)) scale(1); }
+}
 .hero { padding: clamp(52px, 10vw, 104px) 0 44px; border-bottom: 1px solid var(--line); }
 .eyebrow { margin: 0 0 12px; color: var(--green); font: 700 9px/1.4 var(--sans); letter-spacing: .16em; text-transform: uppercase; }
 h1, h2, h3, p { margin-top: 0; }
@@ -130,4 +145,8 @@ h1 { margin-bottom: 8px; font: 500 clamp(48px, 9vw, 90px)/.98 var(--serif); lett
   .project-card p, .timeline-copy, .skill-card p, .info-card ul, .community-card p { font-size: 8px; }
   .closing-card { margin: 18px 0; padding: 14px; }
 }
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .leaf-overlay { display: none; }
+  .scroll-leaf { animation: none; }
+}
