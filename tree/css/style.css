@@ -52,6 +52,25 @@ canvas {
   color: #f1edf0;
   font: 500 11px/1.4 "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
 }
+.overview-link {
+  position: fixed;
+  z-index: 3;
+  top: max(16px, env(safe-area-inset-top));
+  left: max(18px, env(safe-area-inset-left));
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid rgb(241 237 240 / 28%);
+  border-radius: 999px;
+  background: rgb(42 40 44 / 62%);
+  color: #f1edf0;
+  font: 500 11px/1.4 "Libre Franklin", "Helvetica Neue", Arial, sans-serif;
+  letter-spacing: .025em;
+  text-decoration: none;
+  backdrop-filter: blur(10px);
+}
+.overview-link:hover { border-color: rgb(241 237 240 / 62%); background: rgb(42 40 44 / 82%); }
 .language-switch { display: flex; align-items: center; gap: 4px; opacity: .74; }
 .language-switch button {
   padding: 2px;
@@ -62,7 +81,7 @@ canvas {
   cursor: pointer;
 }
 .language-switch button[aria-pressed="true"] { opacity: 1; text-decoration: underline; }
-.language-switch button:focus-visible, .cv-link:focus-visible {
+.language-switch button:focus-visible, .cv-link:focus-visible, .overview-link:focus-visible {
   outline: 2px solid currentColor;
   outline-offset: 3px;
   border-radius: 2px;

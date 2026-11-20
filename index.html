@@ -15,10 +15,11 @@
     <meta property="twitter:title" content="Aya Sadoq" />
     <meta property="twitter:description" content="Aya Sadoq, engineering student building AI and information systems, looking for a PFE internship." />
     <link rel="preload" href="tree/fonts/LibreFranklin-v20.woff2?v=0b5986a181" as="font" type="font/woff2" crossorigin />
-    <link rel="stylesheet" href="tree/css/style.css?v=22c93e4222" />
+    <link rel="stylesheet" href="tree/css/style.css?v=overview-1" />
   </head>
   <body>
     <canvas id="sheet" aria-label="me, projects, experience, community, achievements, now, contact"></canvas>
+    <a class="overview-link" href="overview.html"><span class="overview-link-label">quick overview</span><span aria-hidden="true">↗</span></a>
     <div class="opening-note" aria-label="Introduction">
       <span>i'm aya sadoq. i build ai and software for real-world problems.</span>
       <span>follow the leaves to explore my work.</span>
@@ -44,6 +45,8 @@
         document.documentElement.lang = language;
         document.querySelector("#sheet").setAttribute("aria-label", language === "fr" ? "à propos, projets, compétences, expérience, engagement, distinctions, en ce moment, contact" : "me, projects, skills, experience, community, achievements, now, contact");
         document.querySelector(".top-actions").setAttribute("aria-label", language === "fr" ? "Langue et CV" : "Language and CV");
+        document.querySelector(".overview-link").setAttribute("aria-label", language === "fr" ? "Ouvrir la vue d’ensemble" : "Open the quick overview");
+        document.querySelector(".overview-link-label").textContent = language === "fr" ? "vue d’ensemble" : "quick overview";
         document.querySelector(".language-switch").setAttribute("aria-label", language === "fr" ? "Choisir la langue" : "Choose language");
         document.querySelector('meta[name="description"]').content = description;
         document.querySelector('meta[property="og:description"]').content = description;
