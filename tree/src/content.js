@@ -80,7 +80,7 @@ for (const [slug, label, role, body] of community) lo["/community/" + slug + "/"
 lo["/achievements/ctf/"] = page("ctf",
   P(T("at the macc 2026 (morocco academia cyber competition), organized by the dgssi (morocco's national cybersecurity authority), i placed "), mark("26th out of 1,070 participants (top 3%)"), T(".")),
   IMG("ctf-1337"),
-  LI(T("macc 2026 (morocco academia cyber competition)")),`n  LI(T("cyber odyssey (akasec / 1337) ×2")),
+  LI(T("macc 2026 (morocco academia cyber competition)")), LI(T("cyber odyssey (akasec / 1337) ×2")),
   LI(T("mundiapolis ctf")),
   LI(T("ehtp ctf")),
   LI(T("ensias ctf ×2")),
