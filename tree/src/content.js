@@ -78,9 +78,9 @@ for (const [slug, label, role, body, repo] of experience) {
 }
 for (const [slug, label, role, body] of community) lo["/community/" + slug + "/"] = page(label, P(T(role)), ...bodyBlocks(body));
 lo["/achievements/ctf/"] = page("ctf",
-  P(T("i enjoy the puzzle of finding a way through a system. across capture-the-flag competitions, i ranked "), mark("26th out of 1,070 participants (top 3%)"), T(".")),
+  P(T("at the macc 2026 (morocco academia cyber competition), organized by the dgssi (morocco's national cybersecurity authority), i placed "), mark("26th out of 1,070 participants (top 3%)"), T(".")),
   IMG("ctf-1337"),
-  LI(T("cyber odyssey (akasec / 1337) ×2")),
+  LI(T("macc 2026 (morocco academia cyber competition)")),`n  LI(T("cyber odyssey (akasec / 1337) ×2")),
   LI(T("mundiapolis ctf")),
   LI(T("ehtp ctf")),
   LI(T("ensias ctf ×2")),
